@@ -1,0 +1,11 @@
+langchain==0.1.16
+faiss-cpu
+sentence-transformers==2.7.0
+PyPDF2==3.0.1
+transformers==4.38.0
+langchain-community
+langchain-text-splitters
+streamlit==1.30.0
+pypdf
+transformers
+huggingface-hub==0.17.3
