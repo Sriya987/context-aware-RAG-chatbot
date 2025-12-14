@@ -51,7 +51,13 @@ def load_faiss_vector_store(path="faiss_index"):
 
 @st.cache_resource
 def get_llm():
-    return Ollama(model="mistral:latest")
+    return Ollama(model="neural-chat:latest",  # Much faster than mistral
+        temperature=0.3,
+        num_predict=200,
+        num_thread=12,
+        top_k=40,
+        top_p=0.9,
+        repeat_penalty=1.1)
 
 
 def build_qa_chain():
