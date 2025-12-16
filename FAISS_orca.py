@@ -25,6 +25,7 @@ prompt = PromptTemplate(
 def get_llm():
     return Ollama(model="orca-mini:latest",
                    temperature=0.4, 
+                   num_predict=200,
                    base_url="http://127.0.0.1:11434")
 
 def load_documents(file_path):
@@ -40,8 +41,8 @@ def load_documents(file_path):
 
 def split_text(text):
     text_splitter=RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-        chunk_size=500,  # Reduced for faster processing
-        chunk_overlap=50)  # Reduced overlap
+        chunk_size=300, 
+        chunk_overlap=50)
     texts=text_splitter.split_text(text)
     st.info(f"📊 Created {len(texts)} chunks")
     return texts
@@ -56,10 +57,7 @@ def get_embeddings():
 
 @st.cache_data(show_spinner=False)
 def build_vector_store(chunks):
-    # Using free local embeddings - no API key needed!
     embeddings = get_embeddings()
-    
-    # Process with progress
     total = len(chunks)
     progress_bar = st.progress(0)
     status_text = st.empty()
@@ -79,7 +77,7 @@ def format_docs(docs):
 def rag_chain(vector_store, query):
     qa_chain=(
         {
-            "context":vector_store.as_retriever() | format_docs,
+            "context":vector_store.as_retriever(search_kwargs={"k": 2}) | format_docs,
             "question": RunnablePassthrough(),
         }
         | prompt
