@@ -8,5 +8,6 @@ langchain-text-splitters
 streamlit==1.30.0
 pypdf
 transformers
-huggingface-hub==0.17.3
 google-generativeai
+qdrant-client 
+langchain-qdrant
